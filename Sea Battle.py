@@ -1,11 +1,10 @@
 #  Sea Battle
 
-v = 1.84
+v = 1.89
 
 from random import randint, choice
 from time import sleep
 import os
-
 
 def greating():
     os.system('color a')
@@ -24,7 +23,6 @@ def greating():
           "Version", v)
     input("\nНажмите любую клавишу для продолжения...")
 
-
 class BoardException(Exception):
     pass
 
@@ -38,7 +36,6 @@ class BoardOutException(BoardException):
 class BoardUsedException(BoardException):
     def __str__(self):
         return 'В эту клетку вы уже стреляли!'
-
 
 class Dot:
     def __init__(self, x, y):
@@ -120,9 +117,7 @@ class Board:
             raise BoardUsedException()
         if self.out(d):
             raise BoardOutException()
-
         self.busy.append(d)
-
         for ship in self.ships:
             if ship.is_hit(d):
                 self.field[d.x][d.y] = 'X'
@@ -148,7 +143,6 @@ class Board:
 
     def defeat(self):
         return self.count_destr_ships == len(self.ships)
-
 
 class Player:
     def __init__(self, board: Board, enemy: Board):
@@ -238,7 +232,6 @@ class Game:
             board = self.try_gen_board()
         return board
 
-
     def print_boards(self):
         os.system('cls')
         print("\n\n\n\n\n\n\n")
@@ -276,7 +269,6 @@ class Game:
         else:
             print('Первый ходит игрок!')
             self.loop(0)
-
 
 g = Game()
 if __name__ == "__main__":
