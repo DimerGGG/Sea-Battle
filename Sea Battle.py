@@ -21,7 +21,7 @@ def greating():
           "   ~~~~~~~~~~~~~~~~~\n"
           "\n"
           "Version", v)
-    input("\nНажмите любую клавишу для продолжения...")
+    input("\nНажмите enter для продолжения...")
 
 class BoardException(Exception):
     pass
