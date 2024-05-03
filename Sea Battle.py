@@ -1,4 +1,5 @@
 #  Sea Battle
+
 v = 1.84
 
 from random import randint, choice
@@ -23,6 +24,7 @@ def greating():
           "Version", v)
     input("\nНажмите любую клавишу для продолжения...")
 
+
 class BoardException(Exception):
     pass
 
@@ -36,6 +38,7 @@ class BoardOutException(BoardException):
 class BoardUsedException(BoardException):
     def __str__(self):
         return 'В эту клетку вы уже стреляли!'
+
 
 class Dot:
     def __init__(self, x, y):
@@ -237,7 +240,6 @@ class Game:
 
 
     def print_boards(self):
-        # print('-' * self.size * 10)
         os.system('cls')
         print("\n\n\n\n\n\n\n")
         print('Ваша доска:'.ljust((self.size + 1) * 4 - 1) + ' ' * self.size + 'Доска компьютера:')
