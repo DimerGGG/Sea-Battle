@@ -1,45 +1,41 @@
 #  Sea Battle
-v = 0.02
+v = 1.84
 
 from random import randint, choice
 from time import sleep
 import os
 
+
 def greating():
     os.system('color a')
     os.system('cls')
-    print("\n\n\n"
+    print("\n\n"
           "      МОРСКОЙ БОЙ\n"
           "\n"
-          "   ┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉\n"
-          "   ┉┉┉┉┉┉┉┉┉▃▅▇┉┉┉┉\n"
-          "   ┉┉┉┉┉╱▔▔▔▔▔▔▏┉┉┉\n"
-          "   ▂▂▂┉╱▔▔▔▔▔▉▔┉┉┉┉\n"
-          '   ┉╲▔▔▔▔▔▔▔▔▔▔▔▔▔▏\n'
-          '   ┉┉╲▂▂▂▂▂▂▂▂▂▂▂╱┉\n'
-          "   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\n"
+          "   ~~~~~~~~~~~~~~~~\n"
+          "   ┉┉┉┉┉┉┉┉┉▃▅▇~~~~\n"
+          "   ~~~~~╱▔▔▔▔▔▔▏~~~\n"
+          "   ▂▂▂~╱▔▔▔▔▔▉▔~~~~\n"
+          '   ~╲▔▔▔▔▔▔▔▔▔▔▔▔▔▏\n'
+          '   ~~╲▂▂▂▂▂▂▂▂▂▂▂╱~\n'
+          "   ~~~~~~~~~~~~~~~~~\n"
           "\n"
           "Version", v)
-    input("\n\nНажмите любую клавишу для продолжения...")
-    os.system('cls')
+    input("\nНажмите любую клавишу для продолжения...")
 
 class BoardException(Exception):
     pass
 
-
 class BoardWrongShipException(BoardException):
     pass
-
 
 class BoardOutException(BoardException):
     def __str__(self):
         return 'Нельзя выстрелить за пределы доски!'
 
-
 class BoardUsedException(BoardException):
     def __str__(self):
         return 'В эту клетку вы уже стреляли!'
-
 
 class Dot:
     def __init__(self, x, y):
@@ -51,7 +47,6 @@ class Dot:
 
     def __repr__(self):
         return f'Dot({self.x}, {self.y})'
-
 
 class Ship:
     def __init__(self, bow: Dot, length: int, vertical: bool):
@@ -75,7 +70,6 @@ class Ship:
 
     def is_hit(self, dot) -> bool:
         return dot in self.dots
-
 
 class Board:
     def __init__(self, size: int, hid=False):
@@ -105,7 +99,7 @@ class Board:
                 curr_dot = Dot(dot.x + dx, dot.y + dy)
                 if not self.out(curr_dot) and curr_dot not in self.busy:
                     if visible:
-                        self.field[curr_dot.x][curr_dot.y] = '.'
+                        self.field[curr_dot.x][curr_dot.y] = ' '
                     self.busy.append(curr_dot)
 
     def add_ship(self, ship):
@@ -136,7 +130,7 @@ class Board:
                     self.contour(ship, visible=True)
                     print('Корабль уничтожен!')
                     self.last_hit = []
-                    return False
+                    return True
                 else:
                     print('Корабль ранен!')
                     self.last_hit.append(d)
@@ -171,7 +165,6 @@ class Player:
             except BoardException as excep:
                 print(excep)
 
-
 class AI(Player):
     def ask(self) -> Dot:
         last = self.enemy.last_hit
@@ -190,15 +183,14 @@ class AI(Player):
                 d = Dot(randint(0, self.enemy.size - 1), randint(0, self.enemy.size - 1))
             if d not in self.enemy.busy and not self.enemy.out(d):
                 break
-        sleep(0.1 * randint(15, 50))
+        sleep(0.1 * randint(20, 70))
         print(f'Ход компьютера: {d.x + 1} {d.y + 1}')
         return d
-
 
 class User(Player):
     def ask(self) -> Dot:
         while True:
-            coords = input('Введите координаты выстрела:\t').split()
+            coords = input('Введите координаты выстрела: строка столбец\t').split()
             if len(coords) != 2:
                 print('Введите 2 координаты')
                 continue
@@ -207,7 +199,6 @@ class User(Player):
                 print('Координаты должны быть числами')
                 continue
             return Dot(int(x) - 1, int(y) - 1)
-
 
 class Game:
     def __init__(self, size=6):
@@ -219,39 +210,22 @@ class Game:
         self.ai = AI(ai_board, user_board)
         self.pl = User(user_board, ai_board)
 
-    @staticmethod
-    def greating():
-        os.system('color a')
-        os.system('cls')
-        print("\n\n\n"
-              "      МОРСКОЙ БОЙ\n"
-              "\n"
-              "   ┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉\n"
-              "   ┉┉┉┉┉┉┉┉┉▃▅▇┉┉┉┉\n"
-              "   ┉┉┉┉┉╱▔▔▔▔▔▔▏┉┉┉\n"
-              "   ▂▂▂┉╱▔▔▔▔▔▉▔┉┉┉┉\n"
-              '   ┉╲▔▔▔▔▔▔▔▔▔▔▔▔▔▏\n'
-              '   ┉┉╲▂▂▂▂▂▂▂▂▂▂▂╱┉\n'
-              "   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔\n"
-              "\n"
-              "Version", v)
-        input("\n\nНажмите любую клавишу для продолжения...")
-        os.system('cls')
-
     def try_gen_board(self):
         attempts = 0
         board = Board(size=self.size)
-        for l in range(1, 5):
-            while True:
-                attempts += 1
-                if attempts > 2000:
-                    return None
-                ship = Ship(Dot(randint(0, self.size - 1), randint(0, self.size - 1)), l, bool(randint(0, 1)))
-                try:
-                    board.add_ship(ship)
-                    break
-                except BoardWrongShipException:
-                    pass
+        ships_to_place = [(1, 3), (2, 2), (3, 1)]
+        for ship_length, ship_count in ships_to_place:
+            for _ in range(ship_count):
+                while True:
+                    attempts += 1
+                    if attempts > 2000:
+                        return None
+                    ship = Ship(Dot(randint(0, self.size - 1), randint(0, self.size - 1)), ship_length, bool(randint(0, 1)))
+                    try:
+                        board.add_ship(ship)
+                        break
+                    except BoardWrongShipException:
+                        pass
         board.begin()
         return board
 
@@ -263,13 +237,14 @@ class Game:
 
 
     def print_boards(self):
-        print('-' * self.size * 10)
+        # print('-' * self.size * 10)
+        os.system('cls')
+        print("\n\n\n\n\n\n\n")
         print('Ваша доска:'.ljust((self.size + 1) * 4 - 1) + ' ' * self.size + 'Доска компьютера:')
         for s1, s2 in zip(self.pl.board.__str__().split('\n'), self.ai.board.__str__().split('\n')):
             print(s1 + ' ' * self.size + s2)
 
-    def loop(self):
-        step = 0
+    def loop(self, step):
         while True:
             self.print_boards()
             if step % 2 == 0:
@@ -292,10 +267,16 @@ class Game:
             step += 1
 
     def start(self):
-        self.greet()
-        self.loop()
+        if choice([True, False]):
+            print('Первый ходит компьютер!')
+            self.loop(1)
+
+        else:
+            print('Первый ходит игрок!')
+            self.loop(0)
 
 
 g = Game()
 if __name__ == "__main__":
+    greating()
     g.start()
